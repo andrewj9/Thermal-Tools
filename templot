@@ -57,6 +57,7 @@ ax.yaxis.set_major_locator(MaxNLocator(10))
 plt.ylabel('Temperature (C)')
 plt.subplots_adjust(bottom=0.15)
 #plt.show(block=False)
-fig.savefig('/home/bacca/Plots/cpu-temp_'+str(Time[0].month)+'-'+str(Time[0].day)+'-'+str(Time[0].year)+'.png', bbox_inches='tight')
+plotName = str(Time[0].year)+'-'+str(Time[0].month)+'-'+str(Time[0].day)+'_'+str(Time[0].hour)+':'+str(Time[0].minute)+':'+str(Time[0].second)+'.png'
+fig.savefig('/home/bacca/Plots/cpu-temp_'+plotName, bbox_inches='tight')
 os.remove('/home/bacca/Projects/Python/temps.csv')
 sleep(5)

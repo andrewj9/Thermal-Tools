@@ -36,30 +36,34 @@ if len(sys.argv) > 2:
 	else:
 		sys.exit(invalidTimeErr)
 	loops = executionTime / interval
-#print 'Interval: ' + str(interval) + ' seconds'
-#print 'Execution Time: ' + str(executionTime) + ' seconds'
-#print 'Number of Loops: ' + str(loops)
 i = 0
 try:
-	with open('/home/bacca/Logs/log.t') as f:
-		first_line = f.readline()
-		f.close()
+	with open('/home/bacca/Logs/log.t') as log:
+		first_line = log.readline()
+		log.close()
 		b = first_line.split(' ')[1]
 		d = first_line.split(' ')[2]
+		t = first_line.split(' ')[3]
 		y = first_line.split(' ')[4]
-		os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/log_'+d+'.'+b+'.'+y)
-#	os.remove('/home/bacca/Projects/Python/log.t')
+		archive = 'log_'+y+'.'+b+'.'+d
+		try:
+			oldLog = '/home/bacca/Logs/'+archive
+			newLog = oldLog+'_'+t
+			test = open(oldLog, 'r')
+			test.close()
+			os.system('mv '+oldLog+' '+newLog)
+		except:
+			os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/'+archive)
 except:
 	pass
 while 1:
 	log = open('/home/bacca/Logs/log.t', 'a')
-	os.system('sensors | grep temp1: >> /home/bacca/Projects/Python/t.temp')
-	inputFile = open('/home/bacca/Projects/Python/t.temp', 'r')
-	os.remove('/home/bacca/Projects/Python/t.temp')
+	os.system('sensors | grep Package >> /home/bacca/Projects/Python/Thermal-Tools/t.temp')
+	inputFile = open('/home/bacca/Projects/Python/Thermal-Tools/t.temp', 'r')
+	os.remove('/home/bacca/Projects/Python/Thermal-Tools/t.temp')
 	for line in  inputFile:
-		if len(line) < 84:
-			temper = line.split(' ')
-			cpu = temper[8]
+		temper = line.split(' ')
+		cpu = temper[4]
 	print >> log, time.asctime(), cpu
 	if loops >= 0:
 		i += 1
