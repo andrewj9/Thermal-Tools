@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+import time
+from time import sleep
+import os
+import sys
+
+#print 'Executing...'
+
+invalidTimeErr = "Error: Invalid timespan; Options are 'h', 'm', 's'"
+executionTime = 0
+interval = 0
+loops = 0
+
+if len(sys.argv) > 1:
+	a = sys.argv[1]
+	span = a[-1]
+	if span is 's':
+		interval = int(a[:-1])
+	elif span is 'm':
+		interval = int(a[:-1]) * 60
+	elif span is 'h':
+		interval = int(a[:-1]) * 3600
+	else:
+		sys.exit(invalidTimeErr)
+	loops = -1
+if len(sys.argv) > 2:
+	b = sys.argv[2]
+	span = b[-1]
+	if span is 's':
+		executionTime = int(b[:-1])
+	elif span is 'm':
+		executionTime = int(b[:-1]) * 60
+	elif span is 'h':
+		executionTime = int(b[:-1]) * 3600
+	else:
+		sys.exit(invalidTimeErr)
+	loops = executionTime / interval
+#print 'Interval: ' + str(interval) + ' seconds'
+#print 'Execution Time: ' + str(executionTime) + ' seconds'
+#print 'Number of Loops: ' + str(loops)
+i = 0
+try:
+	with open('/home/bacca/Logs/log.t') as f:
+		first_line = f.readline()
+		f.close()
+		b = first_line.split(' ')[1]
+		d = first_line.split(' ')[2]
+		y = first_line.split(' ')[4]
+		os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/log_'+d+'.'+b+'.'+y)
+#	os.remove('/home/bacca/Projects/Python/log.t')
+except:
+	pass
+while 1:
+	log = open('/home/bacca/Logs/log.t', 'a')
+	os.system('sensors | grep temp1: >> /home/bacca/Projects/Python/t.temp')
+	inputFile = open('/home/bacca/Projects/Python/t.temp', 'r')
+	os.remove('/home/bacca/Projects/Python/t.temp')
+	for line in  inputFile:
+		if len(line) < 84:
+			temper = line.split(' ')
+			cpu = temper[8]
+	print >> log, time.asctime(), cpu
+	if loops >= 0:
+		i += 1
+		if i >= loops:
+			break
+	sleep(interval)
