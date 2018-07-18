@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# This version intended for use on HP EliteBook 8460w
+
 import time
 from time import sleep
 import os
