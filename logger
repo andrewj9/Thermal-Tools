@@ -56,6 +56,7 @@ try:
 			os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/'+archive)
 except:
 	pass
+print "Logging started " + time.asctime()
 while 1:
 	log = open('/home/bacca/Logs/log.t', 'a')
 	os.system('sensors | grep Package >> /home/bacca/Projects/Python/Thermal-Tools/t.temp')
@@ -70,3 +71,4 @@ while 1:
 		if i >= loops:
 			break
 	sleep(interval)
+print "Logging completed " + time.asctime()
