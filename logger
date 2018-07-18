@@ -59,12 +59,12 @@ except:
 print "Logging started " + time.asctime()
 while 1:
 	log = open('/home/bacca/Logs/log.t', 'a')
-	os.system('sensors | grep Package >> /home/bacca/Projects/Python/Thermal-Tools/t.temp')
-	inputFile = open('/home/bacca/Projects/Python/Thermal-Tools/t.temp', 'r')
-	os.remove('/home/bacca/Projects/Python/Thermal-Tools/t.temp')
+	os.system('/opt/vc/bin/vcgencmd measure_temp >> /home/bacca/Thermal-Tools/t.temp')
+	inputFile = open('/home/bacca/Thermal-Tools/t.temp', 'r')
+	os.remove('/home/bacca/Thermal-Tools/t.temp')
 	for line in  inputFile:
-		temper = line.split(' ')
-		cpu = temper[4]
+		temper = line.split('=')
+		cpu = temper[1]
 	print >> log, time.asctime(), cpu
 	if loops >= 0:
 		i += 1
