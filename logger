@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+#This version intended to run on UnixNet (default version)
+
 import time
 from time import sleep
 import os
 import sys
 
-#print 'Executing...'
+print 'Logging started ' + time.asctime()
 
 invalidTimeErr = "Error: Invalid timespan; Options are 'h', 'm', 's'"
 executionTime = 0
@@ -48,14 +50,14 @@ try:
 		d = first_line.split(' ')[2]
 		y = first_line.split(' ')[4]
 		os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/log_'+d+'.'+b+'.'+y)
-#	os.remove('/home/bacca/Projects/Python/log.t')
+
 except:
 	pass
 while 1:
 	log = open('/home/bacca/Logs/log.t', 'a')
-	os.system('sensors | grep temp1: >> /home/bacca/Projects/Python/t.temp')
-	inputFile = open('/home/bacca/Projects/Python/t.temp', 'r')
-	os.remove('/home/bacca/Projects/Python/t.temp')
+	os.system('sensors | grep temp1: >> /home/bacca/Thermal-Tools/t.temp')
+	inputFile = open('/home/bacca/Thermal-Tools/t.temp', 'r')
+	os.remove('/home/bacca/Thermal-Tools/t.temp')
 	for line in  inputFile:
 		if len(line) < 84:
 			temper = line.split(' ')
@@ -66,3 +68,4 @@ while 1:
 		if i >= loops:
 			break
 	sleep(interval)
+print 'Logging completed ' + time.asctime()
