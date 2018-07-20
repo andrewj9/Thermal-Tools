@@ -19,7 +19,7 @@ from matplotlib.ticker import LinearLocator
 
 fileName = sys.argv[1]
 logFile = open(fileName, 'r')
-dat = open('/home/bacca/Projects/Python/temps.csv', 'a')
+dat = open('/home/bacca/Thermal-Tools/temps.csv', 'a')
 for line in logFile:
 	a = line.split(' ')[0]
 	b = line.split(' ')[1]
@@ -29,7 +29,7 @@ for line in logFile:
 	T = line.split(' ')[5][1:-4]
 	print >> dat, a,',',b,',',d,',',t,',',y,',',T,','
 dat.close()
-data = list(csv.reader(open('/home/bacca/Projects/Python/temps.csv', 'r')))
+data = list(csv.reader(open('/home/bacca/Thermal-Tools/temps.csv', 'r')))
 
 Time = []
 Temperature = []
@@ -59,5 +59,5 @@ plt.subplots_adjust(bottom=0.15)
 #plt.show(block=False)
 plotName = str(Time[0].year)+'-'+str(Time[0].month)+'-'+str(Time[0].day)+'_'+str(Time[0].hour)+':'+str(Time[0].minute)+':'+str(Time[0].second)+'.png'
 fig.savefig('/home/bacca/Plots/cpu-temp_'+plotName, bbox_inches='tight')
-os.remove('/home/bacca/Projects/Python/temps.csv')
-sleep(5)
+os.remove('/home/bacca/Thermal-Tools/temps.csv')
+#sleep(5)
