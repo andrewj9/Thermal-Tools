@@ -55,13 +55,12 @@ except:
 	pass
 while 1:
 	log = open('/home/bacca/Logs/log.t', 'a')
-	os.system('sensors | grep temp1: >> /home/bacca/Thermal-Tools/t.temp')
+	os.system('sensors | grep temp2: >> /home/bacca/Thermal-Tools/t.temp')
 	inputFile = open('/home/bacca/Thermal-Tools/t.temp', 'r')
 	os.remove('/home/bacca/Thermal-Tools/t.temp')
 	for line in  inputFile:
-		if len(line) < 84:
-			temper = line.split(' ')
-			cpu = temper[8]
+		temper = line.split(' ')
+		cpu = temper[8]
 	print >> log, time.asctime(), cpu
 	if loops >= 0:
 		i += 1
