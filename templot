@@ -22,11 +22,17 @@ logFile = open(fileName, 'r')
 dat = open('/home/bacca/Thermal-Tools/temps.csv', 'a')
 for line in logFile:
 	a = line.split(' ')[0]
+#	print a
 	b = line.split(' ')[1]
+#	print b
 	d = line.split(' ')[2]
+#	print d
 	t = line.split(' ')[3]
+#	print t
 	y = line.split(' ')[4]
+#	print y
 	T = line.split(' ')[5][1:-4]
+#	print T
 	print >> dat, a,',',b,',',d,',',t,',',y,',',T,','
 dat.close()
 data = list(csv.reader(open('/home/bacca/Thermal-Tools/temps.csv', 'r')))
@@ -35,6 +41,12 @@ Time = []
 Temperature = []
 epochSeconds = []
 for i in range(len(data)):
+#	print '0'+data[i][0]
+#	print '1'+data[i][1]
+#	print '2'+data[i][2]
+#	print '3'+data[i][3]
+#	print '4'+data[i][4]
+#	print '5'+data[i][5]
 	a = data[i][0].strip()
 	b = data[i][1].strip()
 	d = data[i][2].strip()
@@ -46,14 +58,16 @@ for i in range(len(data)):
 	Temperature.append(float(data[i][5]))
 
 hms = dates.DateFormatter('%H:%M:%S')
-fig, ax = plt.subplots(figsize=(15,8), dpi=100)
+fig, ax = plt.subplots(figsize=(25,15), dpi=100)
 plt.plot(Time, Temperature)
 plt.title('CPU Temperature'+' '+str(Time[0].month)+'.'+str(Time[0].day)+'.'+str(Time[0].year))
 plt.xlabel('Time')
 plt.xticks(Time, rotation = 'vertical')
+plt.ylim(30, 100)
 ax.xaxis.set_major_formatter(hms)
 ax.xaxis.set_major_locator(LinearLocator())
 ax.yaxis.set_major_locator(MaxNLocator(10))
+
 plt.ylabel('Temperature (C)')
 plt.subplots_adjust(bottom=0.15)
 #plt.show(block=False)
