@@ -42,26 +42,74 @@ if len(sys.argv) > 2:
 #print 'Execution Time: ' + str(executionTime) + ' seconds'
 #print 'Number of Loops: ' + str(loops)
 i = 0
-try:
-	with open('/home/bacca/Logs/log.t') as f:
-		first_line = f.readline()
-		f.close()
-		b = first_line.split(' ')[1]
-		d = first_line.split(' ')[2]
-		y = first_line.split(' ')[4]
-		os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/log_'+d+'.'+b+'.'+y)
 
-except:
-	pass
+def checkLog():
+	timeStamp = time.asctime()
+	a_now = timeStamp.split(' ')[0]
+        b_now = timeStamp.split(' ')[1]
+        d_now = timeStamp.split(' ')[2]
+        t_now = timeStamp.split(' ')[3]
+        y_now = timeStamp.split(' ')[4]
+	if d_now == '':
+		d_now = '0' + timeStamp.split(' ')[3]
+		t_now = timeStamp.split(' ')[4]
+		y_now = timeStamp.split(' ')[5]
+	try:
+		b = ''
+		d = ''
+		y = ''
+		with open('/home/bacca/Logs/log.t') as f:
+			first_line = f.readline()
+			f.close()
+			b = first_line.split(' ')[1]
+			d = first_line.split(' ')[2]
+			y = first_line.split(' ')[4]
+			if d == '':
+                                d = '0' + first_line.split(' ')[3]
+                                y = first_line.split(' ')[5]
+
+		if y == y_now:
+			if b == b_now:
+				if d == d_now:
+					return 0
+				else:
+					return 1
+			else:
+				return 1
+		else:
+			return 1
+	except:
+		return 0
+
+def newLog():
+	try:
+		with open('/home/bacca/Logs/log.t') as f:
+			first_line = f.readline()
+			f.close()
+			b = first_line.split(' ')[1]
+			d = first_line.split(' ')[2]
+			y = first_line.split(' ')[4]
+			if d == '':
+				d = '0' + first_line.split(' ')[3]
+				y = first_line.split(' ')[5]
+			os.system('mv /home/bacca/Logs/log.t /home/bacca/Logs/log_'+d+'.'+b+'.'+y)
+		print 'Creating New Log'
+	except:
+		pass
+
+newLog()
+
 while 1:
+	if checkLog():
+		newLog()
 	log = open('/home/bacca/Logs/log.t', 'a')
-	os.system('sensors | grep temp1: >> /home/bacca/Thermal-Tools/t.temp')
+	os.system('sensors k10temp-pci-00c3 | grep temp1: >> /home/bacca/Thermal-Tools/t.temp')
 	inputFile = open('/home/bacca/Thermal-Tools/t.temp', 'r')
-	os.remove('/home/bacca/Thermal-Tools/t.temp')
+	#os.remove('/home/bacca/Thermal-Tools/t.temp')
 	for line in  inputFile:
-		if len(line) < 84:
-			temper = line.split(' ')
-			cpu = temper[8]
+	#	if len(line) > 80:
+		temper = line.split(' ')
+		cpu = temper[8]
 	print >> log, time.asctime(), cpu
 	if loops >= 0:
 		i += 1

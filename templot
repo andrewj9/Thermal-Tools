@@ -27,6 +27,11 @@ for line in logFile:
 	t = line.split(' ')[3]
 	y = line.split(' ')[4]
 	T = line.split(' ')[5][1:-4]
+	if d == '':
+		d = line.split(' ')[3]
+		t = line.split(' ')[4]
+		y = line.split(' ')[5]
+		T = line.split(' ')[6][1:-4]
 	print >> dat, a,',',b,',',d,',',t,',',y,',',T,','
 dat.close()
 data = list(csv.reader(open('/home/bacca/Thermal-Tools/temps.csv', 'r')))
@@ -45,18 +50,46 @@ for i in range(len(data)):
 	Time.append(datetime.datetime.strptime(a+' '+b+' '+d+' '+H+':'+M+':'+S+' '+y, '%a %b %d %H:%M:%S %Y'))
 	Temperature.append(float(data[i][5]))
 
+AveTemp = []
+for i in range(len(Temperature)):
+	if i < 1:
+		AveTemp.append(Temperature[i])
+	elif i < 2:
+		AveTemp.append((Temperature[i]+Temperature[i-1])/2)
+	elif i < 3:
+		AveTemp.append((Temperature[i]+Temperature[i-1]+Temperature[i-2])/3)
+	elif i < 4:
+		AveTemp.append((Temperature[i]+Temperature[i-1]+Temperature[i-2]+Temperature[i-3])/4)
+	else:
+		AveTemp.append((Temperature[i]+Temperature[i-1]+Temperature[i-2]+Temperature[i-3]+Temperature[i-4])/5)
+
 hms = dates.DateFormatter('%H:%M:%S')
-fig, ax = plt.subplots(figsize=(15,8), dpi=100)
-plt.plot(Time, Temperature)
-plt.title('CPU Temperature'+' '+str(Time[0].month)+'.'+str(Time[0].day)+'.'+str(Time[0].year))
+fig, ax = plt.subplots(figsize=(24,14), dpi=150)
+plt.plot(Time, AveTemp)
+plt.title('Average CPU Temperature'+' '+str(Time[0].month)+'.'+str(Time[0].day)+'.'+str(Time[0].year))
 plt.xlabel('Time')
 plt.xticks(Time, rotation = 'vertical')
 ax.xaxis.set_major_formatter(hms)
 ax.xaxis.set_major_locator(LinearLocator())
 ax.yaxis.set_major_locator(MaxNLocator(10))
+plt.ylim(20, 50)
+plt.ylabel('Average Temperature (C)')
+plt.subplots_adjust(bottom=0.15)
+aveTempFilename = '/home/bacca/Plots/cpu-avetemp_'+str(Time[0].year)+'-'+str(Time[0].month)+'-'+str(Time[0].day)+'.png'
+fig.savefig(aveTempFilename, bbox_inches='tight')
+print aveTempFilename + ' created'
+fig2, ax2 = plt.subplots(figsize=(24,14), dpi=150)
+plt.plot(Time, Temperature)
+plt.title('CPU Temperature'+' '+str(Time[0].month)+'.'+str(Time[0].day)+'.'+str(Time[0].year))
+plt.xlabel('Time')
+plt.xticks(Time, rotation = 'vertical')
+ax2.xaxis.set_major_formatter(hms)
+ax2.xaxis.set_major_locator(LinearLocator())
+ax2.yaxis.set_major_locator(MaxNLocator(10))
+plt.ylim(20, 50)
 plt.ylabel('Temperature (C)')
 plt.subplots_adjust(bottom=0.15)
-#plt.show(block=False)
-fig.savefig('/home/bacca/Plots/cpu-temp_'+str(Time[0].month)+'-'+str(Time[0].day)+'-'+str(Time[0].year)+'.png', bbox_inches='tight')
+tempFilename = '/home/bacca/Plots/cpu-temp_'+str(Time[0].year)+'-'+str(Time[0].month)+'-'+str(Time[0].day)+'.png'
+fig2.savefig(tempFilename, bbox_inches='tight')
+print tempFilename + ' created'
 os.remove('/home/bacca/Thermal-Tools/temps.csv')
-#sleep(5)
